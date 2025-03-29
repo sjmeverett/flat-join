@@ -134,9 +134,11 @@ const join = createJoinOn({
 
 // throws OrphanedDataError
 const postsWithComments = join(
-  { type: 'comment', id: 'post-1:comment-1', comment: 'Good job!', author: 'Dave' },
-  { type: 'post', id: 'post-1', title: 'Test', description: 'Hello, world!' },
-  { type: 'cat', id: 'cat-1', name: 'Socks' },
+  [
+    { type: 'comment', id: 'post-1:comment-1', comment: 'Good job!', author: 'Dave' },
+    { type: 'post', id: 'post-1', title: 'Test', description: 'Hello, world!' },
+    { type: 'cat', id: 'cat-1', name: 'Socks' },
+  ],
   "post" as const,
   { "comment": "comments" } as const,
 );
