@@ -81,7 +81,7 @@ const postsWithComments = flatJoin(
   "post" as const,
   // a mapping of the other entity types to the
   // name of the field they are to be collected into
-  { "comment": "comments" } as const,
+  { comment: "comments" } as const,
   // additional options
   {
     // the name of the key that will be used as the ID
@@ -90,10 +90,13 @@ const postsWithComments = flatJoin(
     typeKey: "type",
     // a function specifying how to match children to parents
     predicate: (childId: string, parentId: string) =>
-      childId.startsWith(parentId),
+      childId.startsWith(parentId + ":"),
   },
 );
 ```
+
+See how we're adding the `":"` to the `startsWith` check? That's so that e.g.
+`post-11` comments don't end up on `post-1` (since they have the same prefix).
 
 The _really_ cool part is that `postsWithComments` will auto-magically
 have the correct type!
@@ -109,7 +112,7 @@ convenience you can encapsulate the options:
 const join = createJoinOn({
   idKey: "id",
   typeKey: "type",
-  predicate: (child: string, parent: string) => child.startsWith(parent),
+  predicate: (child: string, parent: string) => child.startsWith(parent + ":"),
 });
 
 const postsWithComments = join(
@@ -128,7 +131,7 @@ it will normally just silently ignore it. If you set `throwOnOrphanedData` to
 const join = createJoinOn({
   idKey: "id",
   typeKey: "type",
-  predicate: (child: string, parent: string) => child.startsWith(parent),
+  predicate: (child: string, parent: string) => child.startsWith(parent + ":"),
   throwOnOrphanedData: true,
 });
 
@@ -140,7 +143,7 @@ const postsWithComments = join(
     { type: 'cat', id: 'cat-1', name: 'Socks' },
   ],
   "post" as const,
-  { "comment": "comments" } as const,
+  { comment: "comments" } as const,
 );
 ```
 
