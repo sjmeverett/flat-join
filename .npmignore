@@ -1,0 +1,6 @@
+.vscode/
+test-d/
+eslint.config.mjs
+prettier.config.mjs
+tsconfig.build.json
+tsconfig.json
